@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Men's FIFA World Cup: full extra time vs penalty shootouts</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --text-tertiary: #94a3b8;
+    --bg: #ffffff;
+    --surface: #f8fafc;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --purple-50: #EEEDFE;
+    --purple-400: #7F77DD;
+    --purple-600: #534AB7;
+    --purple-800: #3C3489;
+    --amber-50: #FAEEDA;
+    --amber-400: #BA7517;
+    --amber-600: #854F0B;
+    --amber-800: #633806;
+    --red-500: #E24B4A;
+    --red-50: #FCEBEB;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+  body {
+    font-family: var(--font);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Header */
+  header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+  header .subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+  }
+  header .meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-tertiary);
+  }
+  header .meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* Section headings */
+  h2 {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 40px 0 12px;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 28px 0 8px;
+    color: var(--text);
+  }
+
+  /* Body text */
+  p { font-size: 15px; color: var(--text); margin-bottom: 12px; line-height: 1.7; }
+  p.lede { font-size: 16px; color: var(--text); line-height: 1.7; }
+  .text-secondary { color: var(--text-secondary); font-size: 14px; }
+
+  /* Lists */
+  ul, ol { margin: 0 0 16px 20px; font-size: 15px; color: var(--text); }
+  li { margin-bottom: 4px; }
+  ul li::marker { color: var(--purple-400); }
+
+  /* Strong */
+  strong { font-weight: 500; }
+
+  /* Inline code */
+  code {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 13px;
+    background: var(--surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--text);
+  }
+
+  /* Links */
+  a { color: var(--purple-600); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Cards */
+  .card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .card-header {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Stat cards row */
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    flex: 1;
+    border-radius: var(--radius-md);
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .stat-card .label {
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  .stat-card .sub {
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+  .stat-card.pens {
+    background: var(--purple-50);
+  }
+  .stat-card.pens .num { color: var(--purple-800); }
+  .stat-card.pens .sub { color: var(--purple-600); }
+  .stat-card.et {
+    background: var(--amber-50);
+  }
+  .stat-card.et .num { color: var(--amber-800); }
+  .stat-card.et .sub { color: var(--amber-600); }
+
+  /* Hero visual */
+  .hero {
+    text-align: center;
+    padding: 32px 0 20px;
+  }
+  .hero-num {
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -1px;
+    color: var(--text);
+  }
+  .hero-num .decimal {
+    font-size: 32px;
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+  }
+  .hero-note {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+  }
+
+  /* Stacked bars */
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .bar-label {
+    width: 96px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .bar-label.highlight {
+    color: var(--red-500);
+    font-weight: 500;
+  }
+  .bar-track {
+    flex: 1;
+    height: 20px;
+    border-radius: 4px;
+    display: flex;
+    overflow: hidden;
+    background: var(--border);
+  }
+  .bar-track.highlight {
+    background: var(--red-50);
+  }
+  .bar-seg {
+    height: 100%;
+  }
+  .bar-seg.et { background: var(--amber-400); }
+  .bar-seg.pens { background: var(--purple-400); }
+  .bar-count {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    width: 22px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .bar-pct {
+    font-size: 13px;
+    font-weight: 500;
+    width: 32px;
+    text-align: left;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+  }
+  .bar-pct.highlight {
+    color: var(--red-500);
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .legend .swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .legend-note {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+
+  /* Tournament bars */
+  .t-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .t-bar-year {
+    width: 36px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .t-bar-track {
+    flex: 1;
+    height: 18px;
+    border-radius: 4px;
+    display: flex;
+    overflow: hidden;
+    background: var(--border);
+  }
+  .t-bar-total {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .era-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 8px 0 6px 42px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+  .era-note::before,
+  .era-note::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .era-note::before { margin-right: 8px; }
+  .era-note::after { margin-left: 8px; }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead {
+    background: var(--surface);
+  }
+  th {
+    font-weight: 500;
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  td {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.pct { text-align: center; }
+  thead th.num { text-align: right; }
+  thead th.pct { text-align: center; }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .tag-pens { background: var(--purple-50); color: var(--purple-600); }
+  .tag-et { background: var(--amber-50); color: var(--amber-600); }
+
+  /* Grid layout for info cards */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .info-card {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 16px;
+  }
+  .info-card h4 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+  .info-card p {
+    font-size: 14px;
+    color: var(--text);
+    margin: 0;
+  }
+
+  /* Data sources list */
+  .sources {
+    list-style: none;
+    margin: 12px 0 0;
+  }
+  .sources li {
+    padding: 6px 0;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sources li:last-child { border-bottom: none; }
+
+  /* Collapsible match table */
+  .collapse-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: var(--font);
+  }
+  .collapse-toggle:hover { background: var(--border); }
+  .collapse-toggle .arrow {
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  .collapse-toggle .arrow.open { transform: rotate(90deg); }
+  .collapse-content { display: none; margin-top: 12px; }
+  .collapse-content.open { display: block; }
+
+  /* Footer */
+  footer {
+    margin-top: 48px;
+    padding: 24px 0 48px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-tertiary);
+  }
+
+  /* Methodology step */
+  .step { margin-bottom: 12px; padding-left: 20px; border-left: 2px solid var(--purple-400); }
+  .step-num { font-weight: 500; color: var(--purple-600); font-size: 13px; }
+  .step p { font-size: 14px; margin: 2px 0 0; }
+
+  /* Responsive */
+  @media (max-width: 560px) {
+    .container { padding: 0 16px; }
+    header h1 { font-size: 22px; }
+    .stat-row { flex-direction: column; }
+    .bar-label { width: 72px; font-size: 12px; }
+    .t-bar-year { width: 30px; font-size: 12px; }
+    .hero-num { font-size: 40px; }
+    .hero-num .decimal { font-size: 24px; }
+    .info-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <h1>Men's FIFA World Cup: full extra time vs penalty shootouts</h1>
+    <p class="subtitle">An analysis of every knockout match that reached extra time across nine World Cups — and whether it was decided in the additional 30 minutes or went to penalties.</p>
+    <div class="meta">
+      <span>46 matches analysed</span>
+      <span>9 tournaments</span>
+      <span>1982–2022</span>
+    </div>
+  </header>
+
+  <!-- ============================================ -->
+  <!-- SHORT ANSWER + HERO VISUAL                    -->
+  <!-- ============================================ -->
+
+  <h2>Short answer</h2>
+  <p class="lede">Of the <strong>46</strong> knockout matches in men's World Cups that reached extra time across our sample, <strong>16</strong> (34.8%) were decided in extra time while <strong>30</strong> (65.2%) went to penalties. Nearly two-thirds of all extra-time knockout matches ended in a penalty shootout rather than being settled during the additional 30 minutes.</p>
+
+  <!-- Hero visual: overall split -->
+  <div class="hero">
+    <div class="hero-num">65.2<span class="decimal">%</span></div>
+    <div class="hero-sub">of extra-time knockout matches end in a penalty shootout</div>
+    <div class="hero-note">46 knockout matches across 9 world cups (1982–2022)</div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card pens">
+      <div class="num">30</div>
+      <div class="label">Penalty shootouts</div>
+      <div class="sub">65.2%</div>
+    </div>
+    <div class="stat-card et">
+      <div class="num">16</div>
+      <div class="label">Extra-time decisions</div>
+      <div class="sub">34.8%</div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SCOPE                                        -->
+  <!-- ============================================ -->
+
+  <h2>Scope and exclusions</h2>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h4>Included tournaments</h4>
+      <p>1982, 1986, 1990, 1994 (pre-golden-goal)<br>2006, 2010, 2014, 2018, 2022 (post-golden-goal)</p>
+    </div>
+    <div class="info-card">
+      <h4>Excluded</h4>
+      <p>1930–1978 (no penalty shootout system)<br>1998, 2002 (golden goal active)<br>Qualification and group-stage matches</p>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- DATA SOURCES                                 -->
+  <!-- ============================================ -->
+
+  <h2>Data sources</h2>
+  <p>Match results were sourced from the Rec.Sport.Soccer Statistics Foundation (RSSSF) for each tournament and cross-checked against Wikipedia for verification.</p>
+  <ul class="sources">
+    <li><a href="https://www.rsssf.org/tables/82full.html" target="_blank">1982 World Cup</a></li>
+    <li><a href="https://www.rsssf.org/tables/86full.html" target="_blank">1986 World Cup</a></li>
+    <li><a href="https://www.rsssf.org/tables/90full.html" target="_blank">1990 World Cup</a></li>
+    <li><a href="https://www.rsssf.org/tables/94full.html" target="_blank">1994 World Cup</a></li>
+    <li><a href="https://www.rsssf.org/tables/2006f.html" target="_blank">2006 World Cup</a></li>
+    <li><a href="https://www.rsssf.org/tables/2010f.html" target="_blank">2010 World Cup</a></li>
+    <li><a href="https://www.rsssf.org/tables/2014full.html" target="_blank">2014 World Cup</a></li>
+    <li><a href="https://www.rsssf.org/tables/2018full.html" target="_blank">2018 World Cup</a></li>
+    <li><a href="https://www.rsssf.org/tables/2022f.html" target="_blank">2022 World Cup</a></li>
+  </ul>
+
+  <!-- ============================================ -->
+  <!-- METHODOLOGY                                  -->
+  <!-- ============================================ -->
+
+  <h2>Methodology</h2>
+  <div class="step">
+    <div class="step-num">Step 1 &mdash; Identify candidate matches</div>
+    <p>All knockout-stage matches in the included tournaments were reviewed.</p>
+  </div>
+  <div class="step">
+    <div class="step-num">Step 2 &mdash; Filter for extra time</div>
+    <p>Only matches that were tied after 90 minutes (regulation) were retained.</p>
+  </div>
+  <div class="step">
+    <div class="step-num">Step 3 &mdash; Classify outcome</div>
+    <p>Each match was classified as either <code>extra_time</code> (a goal was scored during the 30-minute extra time period) or <code>penalties</code> (the match remained tied after extra time and proceeded to a penalty shootout).</p>
+  </div>
+  <div class="step">
+    <div class="step-num">Step 4 &mdash; Validate</div>
+    <p>Data was cross-checked against Wikipedia and all rows were programmatically validated (see <code>tests/test_dataset.py</code>).</p>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- OVERALL RESULTS                              -->
+  <!-- ============================================ -->
+
+  <h2>Overall results</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Outcome</th>
+          <th class="num">Count</th>
+          <th class="pct">Percentage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-et">Extra-time decision</span></td>
+          <td class="num">16</td>
+          <td class="pct">34.8%</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-pens">Penalty shootout</span></td>
+          <td class="num">30</td>
+          <td class="pct">65.2%</td>
+        </tr>
+        <tr style="font-weight:500;border-top:2px solid var(--border);">
+          <td>Total</td>
+          <td class="num">46</td>
+          <td class="pct">100%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- STAGE BREAKDOWN VISUAL                       -->
+  <!-- ============================================ -->
+
+  <h2>The quarter-final paradox</h2>
+  <p>The most striking finding emerges when you break the data down by knockout stage. While the round of 16 is relatively balanced &mdash; nearly half of extra-time matches are decided before penalties &mdash; the quarter-finals tell a completely different story. An astonishing <strong>12 of 13</strong> (92.3%) extra-time quarter-finals went to a shootout.</p>
+
+  <div class="card">
+    <div class="card-header">Penalty rate by knockout stage</div>
+
+    <div class="bar-row">
+      <span class="bar-label">Round of 16</span>
+      <div class="bar-track">
+        <div class="bar-seg et" style="width:47.6%"></div>
+        <div class="bar-seg pens" style="width:52.4%"></div>
+      </div>
+      <span class="bar-count">21</span>
+      <span class="bar-pct">52%</span>
+    </div>
+
+    <div class="bar-row">
+      <span class="bar-label highlight">Quarter-final</span>
+      <div class="bar-track highlight">
+        <div class="bar-seg et" style="width:7.7%"></div>
+        <div class="bar-seg pens" style="width:92.3%"></div>
+      </div>
+      <span class="bar-count">13</span>
+      <span class="bar-pct highlight">92%</span>
+    </div>
+
+    <div class="bar-row">
+      <span class="bar-label">Semi-final</span>
+      <div class="bar-track">
+        <div class="bar-seg et" style="width:33.3%"></div>
+        <div class="bar-seg pens" style="width:66.7%"></div>
+      </div>
+      <span class="bar-count">6</span>
+      <span class="bar-pct">67%</span>
+    </div>
+
+    <div class="bar-row">
+      <span class="bar-label">Final</span>
+      <div class="bar-track">
+        <div class="bar-seg et" style="width:40%"></div>
+        <div class="bar-seg pens" style="width:60%"></div>
+      </div>
+      <span class="bar-count">5</span>
+      <span class="bar-pct">60%</span>
+    </div>
+
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--amber-400)"></span>ET-decided</span>
+      <span><span class="swatch" style="background:var(--purple-400)"></span>Penalties</span>
+      <span class="legend-note">% = penalty rate &middot; third-place match excluded (1 match, 100% ET)</span>
+    </div>
+  </div>
+
+  <p class="text-secondary">Why do quarter-finals behave so differently? The gap in quality between teams is narrower than in the round of 16, and the stakes &mdash; a semi-final spot &mdash; make both sides cautious. Teams may prefer to defend deep and trust their luck from the spot rather than risk pushing forward and conceding.</p>
+
+  <!-- ============================================ -->
+  <!-- RESULTS BY STAGE TABLE                       -->
+  <!-- ============================================ -->
+
+  <h3>Results by stage (full table)</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th class="num">Total</th>
+          <th class="num">ET-decided</th>
+          <th class="num">Penalties</th>
+          <th class="pct">% ET</th>
+          <th class="pct">% Pens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Round of 16</td>
+          <td class="num">21</td>
+          <td class="num">10</td>
+          <td class="num">11</td>
+          <td class="pct">47.6</td>
+          <td class="pct">52.4</td>
+        </tr>
+        <tr>
+          <td>Quarter-final</td>
+          <td class="num">13</td>
+          <td class="num">1</td>
+          <td class="num">12</td>
+          <td class="pct">7.7</td>
+          <td class="pct">92.3</td>
+        </tr>
+        <tr>
+          <td>Semi-final</td>
+          <td class="num">6</td>
+          <td class="num">2</td>
+          <td class="num">4</td>
+          <td class="pct">33.3</td>
+          <td class="pct">66.7</td>
+        </tr>
+        <tr>
+          <td>Third place</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td class="num">0</td>
+          <td class="pct">100</td>
+          <td class="pct">0</td>
+        </tr>
+        <tr>
+          <td>Final</td>
+          <td class="num">5</td>
+          <td class="num">2</td>
+          <td class="num">3</td>
+          <td class="pct">40</td>
+          <td class="pct">60</td>
+        </tr>
+        <tr style="font-weight:500;border-top:2px solid var(--border);">
+          <td>Total</td>
+          <td class="num">46</td>
+          <td class="num">16</td>
+          <td class="num">30</td>
+          <td class="pct">34.8</td>
+          <td class="pct">65.2</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- TOURNAMENT TREND VISUAL                      -->
+  <!-- ============================================ -->
+
+  <h2>Tournament trends</h2>
+  <p>The balance between extra-time goals and penalty shootouts has shifted noticeably over time. Early tournaments were more balanced &mdash; 1990 and 2014 each saw a 50/50 split across 8 matches. But recent World Cups have leaned increasingly toward shootouts, culminating in <strong>2022</strong> where all five extra-time matches went to penalties without a single goal in the additional 30 minutes.</p>
+
+  <div class="card">
+    <div class="card-header">Penalty dominance by tournament</div>
+
+    <!-- Pre-golden-goal era -->
+    <div class="t-bar-row">
+      <span class="t-bar-year">1982</span>
+      <div class="t-bar-track">
+        <div class="bar-seg et" style="width:0%"></div>
+        <div class="bar-seg pens" style="width:100%"></div>
+      </div>
+      <span class="t-bar-total">1</span>
+    </div>
+    <div class="t-bar-row">
+      <span class="t-bar-year">1986</span>
+      <div class="t-bar-track">
+        <div class="bar-seg et" style="width:40%"></div>
+        <div class="bar-seg pens" style="width:60%"></div>
+      </div>
+      <span class="t-bar-total">5</span>
+    </div>
+    <div class="t-bar-row">
+      <span class="t-bar-year">1990</span>
+      <div class="t-bar-track">
+        <div class="bar-seg et" style="width:50%"></div>
+        <div class="bar-seg pens" style="width:50%"></div>
+      </div>
+      <span class="t-bar-total">8</span>
+    </div>
+    <div class="t-bar-row">
+      <span class="t-bar-year">1994</span>
+      <div class="t-bar-track">
+        <div class="bar-seg et" style="width:25%"></div>
+        <div class="bar-seg pens" style="width:75%"></div>
+      </div>
+      <span class="t-bar-total">4</span>
+    </div>
+
+    <div class="era-note">1998 and 2002 excluded (golden-goal era)</div>
+
+    <!-- Post-golden-goal era -->
+    <div class="t-bar-row">
+      <span class="t-bar-year">2006</span>
+      <div class="t-bar-track">
+        <div class="bar-seg et" style="width:33.3%"></div>
+        <div class="bar-seg pens" style="width:66.7%"></div>
+      </div>
+      <span class="t-bar-total">6</span>
+    </div>
+    <div class="t-bar-row">
+      <span class="t-bar-year">2010</span>
+      <div class="t-bar-track">
+        <div class="bar-seg et" style="width:50%"></div>
+        <div class="bar-seg pens" style="width:50%"></div>
+      </div>
+      <span class="t-bar-total">4</span>
+    </div>
+    <div class="t-bar-row">
+      <span class="t-bar-year">2014</span>
+      <div class="t-bar-track">
+        <div class="bar-seg et" style="width:50%"></div>
+        <div class="bar-seg pens" style="width:50%"></div>
+      </div>
+      <span class="t-bar-total">8</span>
+    </div>
+    <div class="t-bar-row">
+      <span class="t-bar-year">2018</span>
+      <div class="t-bar-track">
+        <div class="bar-seg et" style="width:20%"></div>
+        <div class="bar-seg pens" style="width:80%"></div>
+      </div>
+      <span class="t-bar-total">5</span>
+    </div>
+    <div class="t-bar-row">
+      <span class="t-bar-year">2022</span>
+      <div class="t-bar-track">
+        <div class="bar-seg et" style="width:0%"></div>
+        <div class="bar-seg pens" style="width:100%"></div>
+      </div>
+      <span class="t-bar-total">5</span>
+    </div>
+
+    <div class="legend" style="margin-top:14px;">
+      <span><span class="swatch" style="background:var(--amber-400)"></span>ET-decided</span>
+      <span><span class="swatch" style="background:var(--purple-400)"></span>Penalties</span>
+      <span class="legend-note">bar width = proportion within each tournament</span>
+    </div>
+  </div>
+
+  <p class="text-secondary">The post-golden-goal era (2006 onward) shows a clear trend toward penalties. The pre-golden-goal era averaged 61.1% penalties; the post-golden-goal era averages 67.9%. And 2022 stands as an outlier &mdash; zero extra-time goals across five knockout matches.</p>
+
+  <!-- ============================================ -->
+  <!-- BY ERA TABLE                                 -->
+  <!-- ============================================ -->
+
+  <h3>Results by era</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Era</th>
+          <th class="num">Total</th>
+          <th class="num">ET-decided</th>
+          <th class="num">Penalties</th>
+          <th class="pct">% ET</th>
+          <th class="pct">% Pens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1982–1994</td>
+          <td class="num">18</td>
+          <td class="num">7</td>
+          <td class="num">11</td>
+          <td class="pct">38.9</td>
+          <td class="pct">61.1</td>
+        </tr>
+        <tr>
+          <td>2006–2022</td>
+          <td class="num">28</td>
+          <td class="num">9</td>
+          <td class="num">19</td>
+          <td class="pct">32.1</td>
+          <td class="pct">67.9</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- BY TOURNAMENT TABLE                          -->
+  <!-- ============================================ -->
+
+  <h3>Results by tournament (full table)</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th class="num">Total</th>
+          <th class="num">ET-decided</th>
+          <th class="num">Penalties</th>
+          <th class="pct">% ET</th>
+          <th class="pct">% Pens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1982</td><td class="num">1</td><td class="num">0</td><td class="num">1</td><td class="pct">0</td><td class="pct">100</td></tr>
+        <tr><td>1986</td><td class="num">5</td><td class="num">2</td><td class="num">3</td><td class="pct">40</td><td class="pct">60</td></tr>
+        <tr><td>1990</td><td class="num">8</td><td class="num">4</td><td class="num">4</td><td class="pct">50</td><td class="pct">50</td></tr>
+        <tr><td>1994</td><td class="num">4</td><td class="num">1</td><td class="num">3</td><td class="pct">25</td><td class="pct">75</td></tr>
+        <tr><td>2006</td><td class="num">6</td><td class="num">2</td><td class="num">4</td><td class="pct">33.3</td><td class="pct">66.7</td></tr>
+        <tr><td>2010</td><td class="num">4</td><td class="num">2</td><td class="num">2</td><td class="pct">50</td><td class="pct">50</td></tr>
+        <tr><td>2014</td><td class="num">8</td><td class="num">4</td><td class="num">4</td><td class="pct">50</td><td class="pct">50</td></tr>
+        <tr><td>2018</td><td class="num">5</td><td class="num">1</td><td class="num">4</td><td class="pct">20</td><td class="pct">80</td></tr>
+        <tr><td>2022</td><td class="num">5</td><td class="num">0</td><td class="num">5</td><td class="pct">0</td><td class="pct">100</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- MATCH APPENDIX                                -->
+  <!-- ============================================ -->
+
+  <h2>Match-level appendix</h2>
+  <p>All 46 matches that reached extra time, their scores at various stages, and the final outcome.</p>
+
+  <div style="margin-bottom:16px;">
+    <button class="collapse-toggle" onclick="toggleTable()">
+      <span class="arrow" id="arrow">&#9654;</span>
+      <span id="toggleLabel">Show full match list</span>
+    </button>
+  </div>
+
+  <div class="collapse-content" id="matchTable">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Stage</th>
+            <th>Home</th>
+            <th>Away</th>
+            <th class="num">90' H</th>
+            <th class="num">90' A</th>
+            <th class="pct">Outcome</th>
+            <th>Winner</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1982</td><td>Semi-final</td><td>West Germany</td><td>France</td><td class="num">3</td><td class="num">3</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>West Germany</td></tr>
+          <tr><td>1986</td><td>Round of 16</td><td>Soviet Union</td><td>Belgium</td><td class="num">2</td><td class="num">2</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Belgium</td></tr>
+          <tr><td>1986</td><td>Quarter-final</td><td>Brazil</td><td>France</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>France</td></tr>
+          <tr><td>1986</td><td>Quarter-final</td><td>West Germany</td><td>Mexico</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>West Germany</td></tr>
+          <tr><td>1986</td><td>Quarter-final</td><td>Spain</td><td>Belgium</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Belgium</td></tr>
+          <tr><td>1986</td><td>Third place</td><td>France</td><td>Belgium</td><td class="num">2</td><td class="num">2</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>France</td></tr>
+          <tr><td>1990</td><td>Round of 16</td><td>Cameroon</td><td>Colombia</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Cameroon</td></tr>
+          <tr><td>1990</td><td>Round of 16</td><td>Spain</td><td>Yugoslavia</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Yugoslavia</td></tr>
+          <tr><td>1990</td><td>Round of 16</td><td>England</td><td>Belgium</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>England</td></tr>
+          <tr><td>1990</td><td>Round of 16</td><td>Rep. of Ireland</td><td>Romania</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Rep. of Ireland</td></tr>
+          <tr><td>1990</td><td>Quarter-final</td><td>Argentina</td><td>Yugoslavia</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Argentina</td></tr>
+          <tr><td>1990</td><td>Quarter-final</td><td>England</td><td>Cameroon</td><td class="num">2</td><td class="num">2</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>England</td></tr>
+          <tr><td>1990</td><td>Semi-final</td><td>Italy</td><td>Argentina</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Argentina</td></tr>
+          <tr><td>1990</td><td>Semi-final</td><td>West Germany</td><td>England</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>West Germany</td></tr>
+          <tr><td>1994</td><td>Round of 16</td><td>Nigeria</td><td>Italy</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Italy</td></tr>
+          <tr><td>1994</td><td>Round of 16</td><td>Mexico</td><td>Bulgaria</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Bulgaria</td></tr>
+          <tr><td>1994</td><td>Quarter-final</td><td>Romania</td><td>Sweden</td><td class="num">2</td><td class="num">2</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Sweden</td></tr>
+          <tr><td>1994</td><td>Final</td><td>Brazil</td><td>Italy</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Brazil</td></tr>
+          <tr><td>2006</td><td>Round of 16</td><td>Argentina</td><td>Mexico</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Argentina</td></tr>
+          <tr><td>2006</td><td>Round of 16</td><td>Switzerland</td><td>Ukraine</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Ukraine</td></tr>
+          <tr><td>2006</td><td>Quarter-final</td><td>Germany</td><td>Argentina</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Germany</td></tr>
+          <tr><td>2006</td><td>Quarter-final</td><td>England</td><td>Portugal</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Portugal</td></tr>
+          <tr><td>2006</td><td>Semi-final</td><td>Germany</td><td>Italy</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Italy</td></tr>
+          <tr><td>2006</td><td>Final</td><td>Italy</td><td>France</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Italy</td></tr>
+          <tr><td>2010</td><td>Round of 16</td><td>USA</td><td>Ghana</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Ghana</td></tr>
+          <tr><td>2010</td><td>Round of 16</td><td>Paraguay</td><td>Japan</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Paraguay</td></tr>
+          <tr><td>2010</td><td>Quarter-final</td><td>Uruguay</td><td>Ghana</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Uruguay</td></tr>
+          <tr><td>2010</td><td>Final</td><td>Spain</td><td>Netherlands</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Spain</td></tr>
+          <tr><td>2014</td><td>Round of 16</td><td>Brazil</td><td>Chile</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Brazil</td></tr>
+          <tr><td>2014</td><td>Round of 16</td><td>Germany</td><td>Algeria</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Germany</td></tr>
+          <tr><td>2014</td><td>Round of 16</td><td>Argentina</td><td>Switzerland</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Argentina</td></tr>
+          <tr><td>2014</td><td>Round of 16</td><td>Belgium</td><td>USA</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Belgium</td></tr>
+          <tr><td>2014</td><td>Round of 16</td><td>Costa Rica</td><td>Greece</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Costa Rica</td></tr>
+          <tr><td>2014</td><td>Quarter-final</td><td>Netherlands</td><td>Costa Rica</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Netherlands</td></tr>
+          <tr><td>2014</td><td>Semi-final</td><td>Argentina</td><td>Netherlands</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Argentina</td></tr>
+          <tr><td>2014</td><td>Final</td><td>Germany</td><td>Argentina</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Germany</td></tr>
+          <tr><td>2018</td><td>Round of 16</td><td>Russia</td><td>Spain</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Russia</td></tr>
+          <tr><td>2018</td><td>Round of 16</td><td>Croatia</td><td>Denmark</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Croatia</td></tr>
+          <tr><td>2018</td><td>Round of 16</td><td>Colombia</td><td>England</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>England</td></tr>
+          <tr><td>2018</td><td>Quarter-final</td><td>Russia</td><td>Croatia</td><td class="num">2</td><td class="num">2</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Croatia</td></tr>
+          <tr><td>2018</td><td>Semi-final</td><td>Croatia</td><td>England</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-et">extra time</span></td><td>Croatia</td></tr>
+          <tr><td>2022</td><td>Round of 16</td><td>Japan</td><td>Croatia</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Croatia</td></tr>
+          <tr><td>2022</td><td>Round of 16</td><td>Morocco</td><td>Spain</td><td class="num">0</td><td class="num">0</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Morocco</td></tr>
+          <tr><td>2022</td><td>Quarter-final</td><td>Croatia</td><td>Brazil</td><td class="num">1</td><td class="num">1</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Croatia</td></tr>
+          <tr><td>2022</td><td>Quarter-final</td><td>Netherlands</td><td>Argentina</td><td class="num">2</td><td class="num">2</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Argentina</td></tr>
+          <tr><td>2022</td><td>Final</td><td>Argentina</td><td>France</td><td class="num">3</td><td class="num">3</td><td class="pct"><span class="tag tag-pens">penalties</span></td><td>Argentina</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- LIMITATIONS                                  -->
+  <!-- ============================================ -->
+
+  <h2>Limitations</h2>
+  <ul>
+    <li><strong>Manual curation:</strong> The dataset was compiled manually from RSSSF pages; some encoding issues exist for older tournaments (1982–1994).</li>
+    <li><strong>Third-place matches:</strong> One third-place match (1986, France vs Belgium) reached extra time and is included in the dataset.</li>
+    <li><strong>Cross-check:</strong> A full cross-check against FIFA's own records has not yet been completed.</li>
+    <li><strong>Small sample:</strong> With 46 matches spread across 9 tournaments, per-tournament and per-stage breakdowns should be interpreted cautiously.</li>
+  </ul>
+
+  <!-- ============================================ -->
+  <!-- FOOTER                                       -->
+  <!-- ============================================ -->
+
+  <footer>
+    <p>Generated from <code>reports/full-extra-time-vs-penalties.md</code> &middot; Dataset and analysis at <a href="https://github.com/nnn/world-cup-penalties-ds">github.com/nnn/world-cup-penalties-ds</a></p>
+  </footer>
+
+</div>
+
+<script>
+function toggleTable() {
+  const content = document.getElementById('matchTable');
+  const arrow = document.getElementById('arrow');
+  const label = document.getElementById('toggleLabel');
+  const isOpen = content.classList.toggle('open');
+  arrow.classList.toggle('open', isOpen);
+  label.textContent = isOpen ? 'Hide full match list' : 'Show full match list';
+}
+</script>
+
+</body>
+</html>

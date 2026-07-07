@@ -1,0 +1,10 @@
+year,url,local_path,status
+1982,https://www.rsssf.org/tables/82full.html,raw/rsssf/world_cup_1982.html,ok
+1986,https://www.rsssf.org/tables/86full.html,raw/rsssf/world_cup_1986.html,ok
+1990,https://www.rsssf.org/tables/90full.html,raw/rsssf/world_cup_1990.html,ok
+1994,https://www.rsssf.org/tables/94full.html,raw/rsssf/world_cup_1994.html,ok
+2006,https://www.rsssf.org/tables/2006f.html,raw/rsssf/world_cup_2006.html,ok
+2010,https://www.rsssf.org/tables/2010f.html,raw/rsssf/world_cup_2010.html,ok
+2014,https://www.rsssf.org/tables/2014full.html,raw/rsssf/world_cup_2014.html,ok
+2018,https://www.rsssf.org/tables/2018full.html,raw/rsssf/world_cup_2018.html,ok
+2022,https://www.rsssf.org/tables/2022f.html,raw/rsssf/world_cup_2022.html,ok
