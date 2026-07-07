@@ -1,5 +1,11 @@
 # World Cup Penalties — extra time vs penalty shootouts
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+<p align="center">
+  <img src="docs/screenshot.png" alt="Report preview" width="720">
+</p>
+
 Analysis of knockout matches in men's FIFA World Cups that reached extra time,
 excluding the golden-goal tournaments (1998, 2002).
 
@@ -19,9 +25,22 @@ uv sync
 uv run python -m world_cup_penalties.collect   # download RSSSF data
 uv run python -m world_cup_penalties.analyze    # print analysis tables
 uv run python -m world_cup_penalties.report     # generate markdown report
-uv run pytest                                   # run all tests
+uv run pytest                                   # run all tests (40 pass)
 uv run ruff check .                             # lint
 ```
+
+> Raw RSSSF HTML pages are not committed to the repo.
+> Run `collect.py` to re-download them on first use.
+
+## HTML report
+
+An interactive HTML version of the report with embedded data visualisations is available at:
+
+```
+reports/full-extra-time-vs-penalties.html
+```
+
+Open it directly in a browser. It features stacked bar charts for the stage breakdown and tournament trends, plus a collapsible full match appendix.
 
 ## Project structure
 
