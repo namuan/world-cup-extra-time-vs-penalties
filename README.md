@@ -1,7 +1,5 @@
 # World Cup Penalties — extra time vs penalty shootouts
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
 <p align="center">
   <img src="docs/screenshot.png" alt="Report preview" width="720">
 </p>
@@ -81,3 +79,7 @@ world-cup-penalties/
 
 - [RSSSF](https://www.rsssf.org/) — primary match data
 - Wikipedia tournament pages — cross-verification
+
+## License
+
+[MIT](LICENSE) &mdash; Copyright (c) 2025 Namuan
